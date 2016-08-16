@@ -68,16 +68,49 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <body>
 
 <div id="container">
-	<h1>Welcome to CodeIgniter!</h1>
+	<h1>Welcome to Wiredecho's CodeIgniter Template!</h1>
 
 	<div id="body">
-		<p>The page you are looking at is being generated dynamically by CodeIgniter.</p>
+		<p>The following has been modded from original CI Files:</p>
 
-		<p>If you would like to edit this page you'll find it located at:</p>
-		<code>application/views/welcome_message.php</code>
+		<p>htaccess</p>
+		<code>IfModule mod_rewrite.c
+		RewriteEngine On
+		RewriteBase /
 
-		<p>The corresponding controller for this page is found at:</p>
-		<code>application/controllers/Welcome.php</code>
+		#Removes access to the system folder by users.
+		#Additionally this will allow you to create a System.php controller,
+		#previously this would not have been possible.
+		#'system' can be replaced if you have renamed your system folder.
+		RewriteCond %{REQUEST_URI} ^system.*
+		RewriteRule ^(.*)$ /index.php?/$1 [L]
+
+		#When your application folder isn't in the system folder
+		#This snippet prevents user access to the application folder
+		#Submitted by: Fabdrol
+		#Rename 'application' to your applications folder name.
+		RewriteCond %{REQUEST_URI} ^application.*
+		RewriteRule ^(.*)$ /index.php?/$1 [L]
+
+		#Checks to see if the user is attempting to access a valid file,
+		#such as an image or css document, if this isn't true it sends the
+		#request to index.php
+		RewriteCond %{REQUEST_FILENAME} !-f
+		RewriteCond %{REQUEST_FILENAME} !-d
+		RewriteRule ^(.*)$ index.php?/$1 [L]
+		/IfModule
+
+		IfModule !mod_rewrite.c
+		# If we don't have mod_rewrite installed, all 404's
+		# can be sent to index.php, and everything works as normal.
+		# Submitted by: ElliotHaughin
+
+		ErrorDocument 404 /index.php
+		IfModule </code>
+
+		<p>config/autoload:</p>
+		<code>$autoload['libraries'] = array('database', 'session');
+		$autoload['helper'] = array('form','url');</code>
 
 		<p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="user_guide/">User Guide</a>.</p>
 	</div>
